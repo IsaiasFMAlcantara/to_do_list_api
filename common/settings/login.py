@@ -100,6 +100,20 @@ class LoginClass:
         except Exception as e:
             log.error(f"Erro crítico na troca de senha para usuário ID {iduser}: {str(e)}", exc_info=True)
             return {'retorno': str(e), 'status': False}
+    
+    def atualizar_informacoes(self, iduser: int, nome: str, email: str) -> dict:
+        log.info(f"Atualizando informações do usuário | ID: {iduser} | Nome: {nome} | Email: {email}")
+
+        # Validação rápida (opcional, mas profissional)
+        if not all([iduser, nome, email]):
+            log.error(f"Dados inválidos para atualização: iduser={iduser}, nome={nome}, email={email}")
+            return {'status': False, 'erro': 'Dados incompletos para atualização.'}
+
+        return {
+            'p_id': iduser,
+            'p_username': nome.strip(),
+            'p_email': email.strip()
+        }
 
 # Instanciando a classe
 fusers = LoginClass()
