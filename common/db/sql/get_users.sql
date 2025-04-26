@@ -1,1 +1,1 @@
-SELECT * FROM public.users WHERE id = :userid;
+SELECT * FROM public.users WHERE id = :userid

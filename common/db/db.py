@@ -62,3 +62,33 @@ class Banco:
 
         log.error(f"Falha na execução da consulta após {MAX_ATTEMPTS} tentativas | Base: {base}")
         return None
+    
+    @staticmethod
+    def executa(params: Dict[str, Any], sql: str, base: str) -> bool:
+        """Executa comandos INSERT, UPDATE ou DELETE no banco de dados."""
+        session = None
+
+        for attempt in range(MAX_ATTEMPTS):
+            try:
+                session = Banco.conexao(base)
+                if not session:
+                    return False  # Falhou a conexão
+
+                session.execute(text(sql), params)
+                session.commit()
+                log.info(f"Comando executado com sucesso | Base: {base}")
+                return True
+
+            except Exception as e:
+                log.warning(f"Erro ao executar comando | Tentativa: {attempt + 1} de {MAX_ATTEMPTS} | Erro: {e}")
+                sleep(2 ** attempt)
+
+            finally:
+                if session:
+                    session.close()
+
+        log.error(f"Falha ao executar comando após {MAX_ATTEMPTS} tentativas | Base: {base}")
+        return False
+
+
+db = Banco()

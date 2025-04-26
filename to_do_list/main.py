@@ -1,16 +1,16 @@
 from fastapi import FastAPI
 from to_do_list.routers import (
-    router_home,
-    router_auth
+    router_users,
+    router_auth,
+    router_home
 )
 
-def create_app() -> FastAPI:
-    app = FastAPI(
-        title="Dashboard de gerentes",
-        version="0.0.1"
-    )
-    app.include_router(router_auth.router)
-    app.include_router(router_home.router)
-    return app
+app = FastAPI(
+    title="To Do List",
+    description="",
+    version="0.0.1"
+)
 
-app = create_app()
+app.include_router(router_home.router)
+app.include_router(router_auth.router)
+app.include_router(router_users.router)

@@ -6,4 +6,4 @@ router = APIRouter(tags=['Home'])
 
 @router.get('/', status_code=HTTPStatus.OK, response_model=GenericResponse, include_in_schema=False)
 def root():
-    return GenericResponse(message='Bem-vindo a api de dashboard de gerentes Novalar')
+    return GenericResponse(message='Bem-vindo a api do TO-DO-LIST')
