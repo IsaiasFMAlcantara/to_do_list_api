@@ -1,0 +1,1 @@
+SELECT public.update_user(:p_id, :p_username, :p_email);

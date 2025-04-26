@@ -1,1 +1,1 @@
-INSERT INTO users (username, password_hash) VALUES (:name, :password);
+INSERT INTO public.users (username, password_hash, email) VALUES (:name, :password, :v_email);

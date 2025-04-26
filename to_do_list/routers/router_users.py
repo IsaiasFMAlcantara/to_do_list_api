@@ -3,8 +3,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from to_do_list.schemas.schema_generico import GenericResponse
 from common.db.db import db
 from utils.files import _open_file
-from to_do_list.schemas.schema_users import GetUserInput, CreateUserInput
+from to_do_list.schemas.schema_users import (
+    GetUserInput, CreateUserInput
+)
 from fastapi.responses import JSONResponse
+from common.settings.login import fusers
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -12,11 +15,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 def create_user(user: CreateUserInput = Depends()) -> GenericResponse:
     sql = _open_file("common/db/sql/insert_user.sql")
     base = "local"
-    params = {
-        "name": user.username,
-        "password": user.password
-    }
-
+    params = fusers.criar_conta(user.username,user.password,user.email)
     try:
         resultado = db.executa(params, sql, base)
 

@@ -7,76 +7,74 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class LoginClass:
     def _validar_email(self, email):
         padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        if re.match(padrao, email):
-            return {
-                'retorno':'E-mail valido',
-                'status':True
-            }
-        else:
-            return {
-                'retorno':'E-mail inválido.',
-                'status':False
-            }
+        return {
+            'retorno': 'E-mail válido' if re.match(padrao, email) else 'E-mail inválido',
+            'status': bool(re.match(padrao, email))
+        }
 
-    def _validar_senha(self, pw, hh):
+    def _validar_senha(self, senha, hash_senha):
         try:
-            verify = pwd_context.verify(pw, hh)
-            return verify
-        except UnknownHashError:
+            return pwd_context.verify(senha, hash_senha)
+        except (UnknownHashError, ValueError):
             return False
 
     def _criar_hash(self, senha):
         try:
             return pwd_context.hash(senha)
         except Exception as e:
-            return {
-                'retorno':f"Erro ao criar o hash: {e}",
-                'status':False
-            }
+            raise Exception(f"Erro ao criar hash da senha: {str(e)}")
 
-    def criar_conta(self, nome, email, password, marcas=None, colunas=None):
+    def criar_conta(self, nome, senha, email):
         if self._validar_email(email):
-            hash_senha = self._criar_hash(password)
-            if hash_senha:
-                informacoes = {
-                    'nome': nome,
-                    'senha': hash_senha,
-                    'marcas': marcas or [],
-                    'colunas': colunas or []
-                }
-                return informacoes
-            else:
+            try:
+                hash_senha = self._criar_hash(senha)
                 return {
-                    'retorno':"Erro ao criar conta. Não foi possível gerar o hash da senha.",
-                    'status':False
+                    "name": nome,
+                    "password": hash_senha,
+                    "v_email":email
                 }
-        else:
-            return None
+            except Exception as e:
+                return {'retorno': str(e), 'status': False}
 
-    def login(self, hash_password, password):
-        validate = self._validar_senha(password, hash_password)
-        return validate
-
-    def trocar_senha(self, password, hash_password, iduser, email, new_password):
-        if self._validar_senha(password, hash_password):
-            nova_senha_hash = self._criar_hash(new_password)
-            if nova_senha_hash:
-                informacoes = {
-                    'iduser': iduser,
-                    'email': email,
-                    'senha': nova_senha_hash,
-                }
-                return informacoes
-            else:
-                return {
-                    'retorno':"Erro ao criar o hash para a nova senha.",
-                    'status':False
-                }
-        else:
+    def login(self, senha_digitada, hash_senha_armazenado):
+        """
+        Faz login comparando a senha digitada com o hash salvo.
+        Retorna dicionário padronizado: sucesso ou erro.
+        """
+        if not senha_digitada or not hash_senha_armazenado:
             return {
-                'retorno':"Senha atual incorreta. Não é possível trocar a senha.",
-                'status':False
+                'retorno': 'Senha ou hash não fornecido.',
+                'status': False
             }
 
+        if self._validar_senha(senha_digitada, hash_senha_armazenado):
+            return {
+                'retorno': 'Login realizado com sucesso.',
+                'status': True
+            }
+        else:
+            return {
+                'retorno': 'Senha incorreta.',
+                'status': False
+            }
 
-login_email = LoginClass()
+    def trocar_senha(self, senha_atual, hash_senha_atual, iduser, email, nova_senha):
+        if not self._validar_senha(senha_atual, hash_senha_atual):
+            return {
+                'retorno': "Senha atual incorreta. Não é possível trocar a senha.",
+                'status': False
+            }
+        
+        try:
+            novo_hash = self._criar_hash(nova_senha)
+            return {
+                'iduser': iduser,
+                'email': email,
+                'senha': novo_hash,
+                'status': True
+            }
+        except Exception as e:
+            return {'retorno': str(e), 'status': False}
+
+# Instanciando a classe
+fusers = LoginClass()

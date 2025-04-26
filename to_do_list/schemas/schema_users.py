@@ -5,4 +5,5 @@ class GetUserInput(BaseModel):
 
 class CreateUserInput(BaseModel):
     username: str
+    email: str
     password: str
