@@ -61,8 +61,3 @@ eval $(poetry env activate)
 - [ ] Adicionar sistema de prioridade nas tarefas: **baixa**, **média**, **alta**.
 - [ ] Implementar busca e filtros nas tarefas.
 - [ ] Paginação nas listagens.
-
----
-
-Quer que eu também monte uma versão com badges (tipo cobertura de testes, status build, versão Python)? Deixa teu projeto ainda mais top. 🚀  
-Quer também uma sugestão de estrutura de pastas pra deixar o repo mais bala?
