@@ -1,28 +1,68 @@
-# TO DO LIST (API) 📝
+# TO DO LIST API 🛡️📝
 
 ## Visão Geral
-Uma API RESTful simples e robusta para gerenciamento de tarefas (To-Do List) com autenticação de usuários via token JWT. Ideal para uso em projetos pessoais, testes de integração ou como base para aplicações maiores.
+Uma API RESTful **rápida, robusta e segura** para gerenciamento de tarefas com **autenticação JWT**. Ideal para projetos pessoais, testes, ou como ponto de partida para aplicações maiores.
+
+## Como Rodar
+
+### 1. Instalar o Poetry
+```bash
+pipx install poetry
+```
+
+### 2. Instalar Dependências
+```bash
+poetry install
+```
+
+### 3. Ativar Ambiente Virtual
+```bash
+eval $(poetry env activate)
+```
+
+### 4. Rodar a API
+- **Modo Desenvolvimento**
+  ```bash
+  task dev
+  ```
+- **Modo Produção**
+  ```bash
+  task run
+  ```
+
+> **Obs:** `task` é usado para rodar tasks definidas no arquivo `Taskfile.yml`. Se não tiver instalado, use `poetry install`.
 
 ## Funcionalidades
 
-### 🛡️ Autenticação de Usuário
-- **POST `/create_user`** – Cadastro de novo usuário.
-- **POST `/login`** – Autenticação e geração de token JWT.
-- **GET `/get_user`** - Busca usuário por id
-- **POST `/logout`** (opcional) – Invalidação do token atual.
+### 🔐 Autenticação
+- `POST /create_user` — Cria novo usuário.
+- `POST /login` — Autentica usuário e gera token JWT.
+- `GET /get_user` — Retorna dados do usuário autenticado.
+- `POST /logout` *(opcional)* — Invalida o token atual.
 
-### 📝 Gerenciamento de Tarefas
-- **GET `/todos`** – Lista todas as tarefas do usuário autenticado.
-- **GET `/todos/:id`** – Retorna os detalhes de uma tarefa específica.
-- **POST `/todos`** – Cria uma nova tarefa.
-- **PUT `/todos/:id`** – Atualiza todos os campos de uma tarefa existente.
-- **PATCH `/todos/:id/complete`** – Marca uma tarefa como concluída.
-- **DELETE `/todos/:id`** – Remove uma tarefa.
+### ✅ Gerenciamento de Tarefas
+- `GET /todos` — Lista todas as tarefas.
+- `GET /todos/:id` — Detalhes de uma tarefa específica.
+- `POST /todos` — Cria uma nova tarefa.
+- `PUT /todos/:id` — Atualiza uma tarefa inteira.
+- `PATCH /todos/:id/complete` — Marca tarefa como concluída.
+- `DELETE /todos/:id` — Deleta uma tarefa.
 
-## Observações
-- Todas as rotas de tarefas exigem autenticação prévia (Bearer Token).
-- Design de API pensado para escalabilidade e fácil manutenção.
-- Padrão de resposta consistente (JSON) para facilitar integrações.
+## Requisitos de Uso
+- Autenticação via Bearer Token obrigatória em todas as rotas de tarefas.
+- Respostas em **JSON** com estrutura padronizada para fácil integração.
 
-## Próximos Passos (Sugestão)
-- Adicionar prioridade às tarefas (baixa, média, alta).
+## Boas Práticas Implementadas
+- Código modular e escalável.
+- Autenticação segura usando JWT.
+- Pronto para deploy em produção.
+
+## Próximos Passos
+- [ ] Adicionar sistema de prioridade nas tarefas: **baixa**, **média**, **alta**.
+- [ ] Implementar busca e filtros nas tarefas.
+- [ ] Paginação nas listagens.
+
+---
+
+Quer que eu também monte uma versão com badges (tipo cobertura de testes, status build, versão Python)? Deixa teu projeto ainda mais top. 🚀  
+Quer também uma sugestão de estrutura de pastas pra deixar o repo mais bala?
