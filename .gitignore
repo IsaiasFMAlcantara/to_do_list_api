@@ -134,7 +134,6 @@ dmypy.json
 cython_debug/
 
 # Logs/*.log
-logs/
 *.log
 *.log.*
 
